@@ -5,23 +5,69 @@
     <title>Electron Boilerplate</title>
 
     <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
+    <link href="node_modules/materialize-css/dist/css/materialize.min.css" rel="stylesheet" type="text/css">
 
     <script src="helpers/context_menu.js"></script>
     <script src="helpers/external_links.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/hammerjs/hammer.min.js"></script>
+    <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
 
     <script src="app.js"></script>
+<!--
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+-->
+
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="greet"></h1>
-        <p class="subtitle">
-            Welcome to <a href="http://electron.atom.io" class="js-external-link">Electron</a> app running on this magnificent <strong id="platform-info"></strong> machine.
-        </p>
-        <p class="subtitle">
-            You are in <strong id="env-name"></strong> environment.
-        </p>
+    <!-- Page Layout here -->
+    <div class="row" style="height: 100%">
+
+        <div class="col s3">
+            <!-- Grey navigation panel -->
+        </div>
+
+        <div class="col s9" style="margin-top: 1rem">
+            <!-- Teal page content  -->
+            <div class="card-panel">
+                <h1>Heading h1</h1>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input value="" id="title" type="text" class="validate">
+                        <label class="active" for="title">Titel</label>
+                    </div>
+
+                    <div class="input-field col s4">
+                        <select id="hour-selector"></select>
+                        <label>Stunden</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <select id="minute-selector"></select>
+                        <label>Minuten</label>
+                    </div>
+                    <div class="input-field col s4">
+                        <select id="second-selector"></select>
+                        <label>Sekunden</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <textarea id="textarea1" class="materialize-textarea" length="500"></textarea>
+                        <label for="textarea1">Beschreibung</label>
+                    </div>
+
+                    <a class="waves-effect waves-light btn-large">Hinzufügen</a>
+                </div>
+
+                <p class="flow-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam architecto, aspernatur assumenda deserunt dolor doloremque, ea eum exercitationem fuga magnam molestias, nisi non nostrum repellat saepe sint suscipit vel voluptatem.</p>
+            </div>
+        </div>
+
     </div>
+    <script>
+
+    </script>
 
 </body>
 </html>
