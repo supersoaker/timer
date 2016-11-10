@@ -25,14 +25,32 @@ export default class TimerApp {
     static init() {
         TimerApp.setListener();
         TimerApp.updateStorage();
+        TimerApp.showPage('edit');
     }
 
     static setListener() {
         $('#finished-editing').on('click', TimerApp.updateTimer);
+        $('#edit-timer').on('click', function() {
+            // Get current active timer
+            TimerApp.showPage('edit', $('.navigation .collection a.active').data('id'));
+        });
     }
 
     static fillDetailPage(id) {
         let timer = TimerApp.timerCollection[id];
+        for (let key in timer) {
+            $('#detail').find('.' + key).html(timer[key]);
+        }
+        TimerApp.updateMaterialDesign();
+    }
+
+    static fillEditPage(id) {
+        let timer = TimerApp.defaultTimer;
+
+        // If id is set => load content for given timer
+        if(id) {
+            timer = TimerApp.timerCollection[id];
+        }
         for (let key in timer) {
             $('#edit').find('.' + key).val(timer[key]);
         }
@@ -107,12 +125,22 @@ export default class TimerApp {
             // Add on click listener on each detail link
             $newLink.on('click', function() {
                 let id = this.getAttribute('data-id');
-                TimerApp.fillDetailPage(id);
+                TimerApp.showPage('detail', id);
                 $collection.find('a').removeClass('active');
                 $collection.find('a[data-id="'+ id +'"]').addClass('active');
             });
             $collection.append($newLink);
         }
+    }
+
+    static showPage(name, timerId) {
+        // Hide all other pages
+        $('.content .card-panel').hide();
+        $('.content').find('#'+ name).show();
+
+        // Capitalize and execute fill page method
+        name = name[0].toUpperCase() + name.slice(1);
+        TimerApp[`fill${name}Page`](timerId);
     }
 
     static updateMaterialDesign() {
