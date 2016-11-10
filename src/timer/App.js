@@ -24,9 +24,28 @@ export default class TimerApp {
      */
     static init() {
         TimerApp.setListener();
+        TimerApp.initializeTimerOptions();
         TimerApp.updateStorage();
         TimerApp.showPage('edit');
     }
+
+    static initializeTimerOptions() {
+        let html = '';
+        let i = 0;
+
+        // Iterate the options for minutes and second from 0 to 59
+        for(i; i<60; i++)
+            html += '<option value="'+i+'">'+i+'</option>';
+
+        $('.minute-selector, .second-selector').html(html);
+
+        // Iterate the options for hours from 0 to 23
+        for(i = 0, html = ''; i<25; i++)
+            html += '<option value="'+i+'">'+i+'</option>';
+
+        $('.hour-selector').html(html);
+    };
+
 
     static setListener() {
         $('#finished-editing').on('click', TimerApp.updateTimer);
@@ -41,7 +60,6 @@ export default class TimerApp {
         for (let key in timer) {
             $('#detail').find('.' + key).html(timer[key]);
         }
-        TimerApp.updateMaterialDesign();
     }
 
     static fillEditPage(id) {
@@ -54,7 +72,6 @@ export default class TimerApp {
         for (let key in timer) {
             $('#edit').find('.' + key).val(timer[key]);
         }
-        TimerApp.updateMaterialDesign();
     }
 
     static getTimerFromEditPage() {
@@ -67,12 +84,8 @@ export default class TimerApp {
 
     static updateTimer() {
         let timer = TimerApp.getTimerFromEditPage();
-        console.log(timer);
 
-        if(timer.id){
-            // update
-            TimerApp.timerCollection[timer.id] = timer;
-        } else {
+        if(!timer.id || timer.id == '0'){
             // create
             let uniqueId = Math.random().toString(36).substring(7);
             // Create unique id as long as an element exists
@@ -81,8 +94,12 @@ export default class TimerApp {
             }
             timer.id = uniqueId;
             TimerApp.timerCollection[uniqueId] = timer;
+        } else {
+            // update
+            TimerApp.timerCollection[timer.id] = timer;
         }
         TimerApp.updateStorage();
+        TimerApp.showPage('detail', timer.id);
     }
 
     static updateStorage() {
@@ -141,6 +158,9 @@ export default class TimerApp {
         // Capitalize and execute fill page method
         name = name[0].toUpperCase() + name.slice(1);
         TimerApp[`fill${name}Page`](timerId);
+
+        // Update all changing material design elements
+        TimerApp.updateMaterialDesign();
     }
 
     static updateMaterialDesign() {

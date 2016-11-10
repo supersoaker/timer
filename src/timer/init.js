@@ -5,25 +5,6 @@ export default function init() {
 
         TimerApp.init();
 
-        (function initializeTimerOptions() {
-            var html = '';
-            var i = 0;
-            // Iterate the options for minutes and second from 0 to 59
-            for(i; i<60; i++)
-                html += '<option value="'+i+'">'+i+'</option>';
-
-            $('#minute-selector, #second-selector').html(html);
-
-            // Iterate the options for hours from 0 to 23
-            for(i = 0, html = ''; i<25; i++)
-                html += '<option value="'+i+'">'+i+'</option>';
-
-            $('#hour-selector').html(html);
-
-            // Initialize material design
-            $('select').material_select();
-        }());
-
         (function addTextAreaTabFix() {
             $(document).delegate('textarea', 'keydown', function(e) {
                 var keyCode = e.keyCode || e.which;
