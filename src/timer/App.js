@@ -27,7 +27,6 @@ export default class TimerApp {
     static init() {
         TimerApp.setListener();
         TimerApp.updateStorage();
-        TimerApp.updateLayout();
     }
 
     static setListener() {
@@ -57,20 +56,36 @@ export default class TimerApp {
 
         if(timer.id){
             // update
+            TimerApp.timerCollection[timer.id] = timer;
         } else {
             // create
+            TimerApp.timerCollection.push(timer);
         }
+        TimerApp.updateStorage();
     }
 
     static updateStorage() {
-        storage.get(collectionStorageName, function(error, data) {
-            if (error) throw error;
+        TimerApp.loadDataLayout();
+        // Only get the collection when starting the application
+        if ($.isEmptyObject(TimerApp.timerCollection)) {
+            storage.get(collectionStorageName, function(error, data) {
+                if (error) throw error;
 
-            console.log('Got data from storage: ', data);
-            TimerApp.timerCollection = data;
-            TimerApp.updateLayout();
-        });
+                console.log('Got data from storage: ', data);
+                TimerApp.timerCollection = data;
+                TimerApp.updateLayout();
+            });
+        } else {
+            // Otherwise set the new timer collection
+            storage.set(collectionStorageName, TimerApp.timerCollection, function(error) {
+                if (error) throw error;
+
+                TimerApp.updateLayout();
+            });
+        }
     }
+
+    static loadDataLayout() { /* Maybe for ajax spinner or something. */ }
 
     static updateLayout() {
         // here goes the layout.
