@@ -99,8 +99,27 @@ export default class TimerApp {
         TimerApp.showPage('edit');
     }
 
+    static getTimerEnd(timer) {
+        var current = new Date ();
+        var endTime = new Date ( current );
+        console.log(current);
+        endTime.setHours( current.getHours() + timer['hour-selector'] );
+        endTime.setMinutes( current.getMinutes() + timer['minute-selector'] );
+        endTime.setSeconds( current.getSeconds() + timer['second-selector'] );
+        console.log(endTime);
+        return endTime;
+    }
+
     static updateTimer() {
         let timer = TimerApp.getTimerFromEditPage();
+
+        if(!timer.title) {
+            TimerApp.showPage('edit');
+            return;
+        }
+
+        // Recalculate the end time
+        timer['end-time'] = TimerApp.getTimerEnd(timer);
 
         if(!timer.id || timer.id == '0'){
             // create
@@ -115,11 +134,12 @@ export default class TimerApp {
             // update
             TimerApp.timerCollection[timer.id] = timer;
         }
-        TimerApp.updateStorage();
-        TimerApp.showPage('detail', timer.id);
+        TimerApp.updateStorage(() => {
+            TimerApp.showPage('detail', timer.id);
+        });
     }
 
-    static updateStorage() {
+    static updateStorage(callback = function() {}) {
         TimerApp.loadDataLayout();
         // Only get the collection when starting the application
         if ($.isEmptyObject(TimerApp.timerCollection)) {
@@ -129,6 +149,7 @@ export default class TimerApp {
                 console.log('Got data from storage: ', data);
                 TimerApp.timerCollection = data;
                 TimerApp.updateLayout();
+                callback();
             });
         } else {
             // Otherwise set the new timer collection
@@ -136,6 +157,7 @@ export default class TimerApp {
                 if (error) throw error;
 
                 TimerApp.updateLayout();
+                callback();
             });
         }
     }
@@ -160,8 +182,6 @@ export default class TimerApp {
             $newLink.on('click', function() {
                 let id = this.getAttribute('data-id');
                 TimerApp.showPage('detail', id);
-                $collection.find('a').removeClass('active');
-                $collection.find('a[data-id="'+ id +'"]').addClass('active');
             });
             $collection.append($newLink);
         }
@@ -171,6 +191,14 @@ export default class TimerApp {
         // Hide all other pages
         $('.content .card-panel').hide();
         $('.content').find('#'+ name).show();
+
+        // Update active navigation element
+        if(name == 'detail'){
+            let $collection = $('.navigation .collection');
+            $collection.find('a').removeClass('active');
+            $collection.find('a[data-id="'+ timerId +'"]').addClass('active');
+            console.log($collection.find('a[data-id="'+ timerId +'"]'));
+        }
 
         // Capitalize and execute fill page method
         name = name[0].toUpperCase() + name.slice(1);
