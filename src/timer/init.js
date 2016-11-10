@@ -3,7 +3,7 @@ import TimerApp from './App.js';
 export default function init() {
     jQuery(document).ready(function($) {
 
-        console.log(TimerApp.getInstance());
+        TimerApp.getInstance().fillDetailPage();
 
         (function initializeTimerOptions() {
             var html = '';
