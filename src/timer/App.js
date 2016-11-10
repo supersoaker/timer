@@ -57,6 +57,8 @@ export default class TimerApp {
                 if(timer['end-time-stamp'] !== 0 && diff <= 0) {
                     if(timer.type == 'interval') {
                         timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
+                        // Update view of current detail timer, if it is an interval
+                        TimerApp.fillDetailPage();
                     } else
                     if(timer.type == 'timer') {
                         timer['end-time-stamp'] = 0;
@@ -84,7 +86,7 @@ export default class TimerApp {
         });
     }
 
-    static fillDetailPage(id) {
+    static fillDetailPage(id = TimerApp.getCurrentTimerId()) {
         let timer = TimerApp.timerCollection[id];
         let $detail = $('#detail');
         for (let key in timer) {
@@ -101,7 +103,6 @@ export default class TimerApp {
             diff = 0;
         }
         let clock = $('#clock-container').FlipClock(diff, {
-            lang:'de',
             countdown: true
         });
     }
@@ -141,6 +142,7 @@ export default class TimerApp {
     }
 
     static deleteTimer() {
+        console.log(TimerApp.getCurrentTimerId());
         delete TimerApp.timerCollection[TimerApp.getCurrentTimerId()];
         TimerApp.updateStorage();
         TimerApp.showPage('edit');
