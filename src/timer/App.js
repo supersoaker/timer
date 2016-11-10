@@ -142,8 +142,9 @@ export default class TimerApp {
     }
 
     static deleteTimer() {
-        console.log(TimerApp.getCurrentTimerId());
+        console.log(TimerApp.timerCollection);
         delete TimerApp.timerCollection[TimerApp.getCurrentTimerId()];
+        console.log(TimerApp.timerCollection);
         TimerApp.updateStorage();
         TimerApp.showPage('edit');
     }
@@ -190,7 +191,7 @@ export default class TimerApp {
     static updateStorage(callback = function() {}, updateLayout = true) {
         TimerApp.loadDataLayout();
         // Only get the collection when starting the application
-        if ($.isEmptyObject(TimerApp.timerCollection)) {
+        if (typeof TimerApp.timerCollection == 'undefined') {
             storage.get(collectionStorageName, function(error, data) {
                 if (error) throw error;
 
