@@ -238,6 +238,11 @@ export default class TimerApp {
             });
             $collection.append($newLink);
         }
+        if($.isEmptyObject(TimerApp.timerCollection)) {
+            $collection.hide();
+        } else {
+            $collection.show();
+        }
     }
 
     static showPage(name, timerId) {
