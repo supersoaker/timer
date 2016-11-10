@@ -19,8 +19,6 @@ export default class TimerApp {
         };
     }
 
-    static timerCollection = {};
-
     /**
      * initialize the application
      */
@@ -33,10 +31,11 @@ export default class TimerApp {
         $('#finished-editing').on('click', TimerApp.updateTimer);
     }
 
-    static fillDetailPage() {
-        for (let key in TimerApp.defaultTimer) {
-            $('#edit').find('#' + key).val(TimerApp.defaultTimer[key]);
-            console.log('#' + key, '=>', TimerApp.defaultTimer[key]);
+    static fillDetailPage(id) {
+        let timer = TimerApp.timerCollection[id];
+        for (let key in timer) {
+            $('#edit').find('#' + key).val(timer[key]);
+            console.log('#' + key, '=>', timer[key]);
         }
 
         TimerApp.updateMaterialSelects();
@@ -59,7 +58,13 @@ export default class TimerApp {
             TimerApp.timerCollection[timer.id] = timer;
         } else {
             // create
-            TimerApp.timerCollection.push(timer);
+            let uniqueId = Math.random().toString(36).substring(7);
+            // Create unique id as long as an element exists
+            while(TimerApp.timerCollection[uniqueId]) {
+                uniqueId = Math.random().toString(36).substring(7);
+            }
+            timer.id = uniqueId;
+            TimerApp.timerCollection[uniqueId] = timer;
         }
         TimerApp.updateStorage();
     }
@@ -89,6 +94,19 @@ export default class TimerApp {
 
     static updateLayout() {
         // here goes the layout.
+        
+        console.log('Updating layout with timers:', TimerApp.timerCollection);
+        // Timer navigation
+        let navigationList = '';
+        $('.collection').empty();
+        for (var id in TimerApp.timerCollection) {
+            let timer = TimerApp.timerCollection[id];
+            let $newLink = $('<a href="#!" data-id="'+ timer.id +'" class="collection-item">'+ timer.title +'</a>');
+            $newLink.on('click', function() {
+                TimerApp.fillDetailPage(this.getAttribute('data-id'));
+            });
+            $('.collection').append($newLink);
+        }
     }
 
     static updateMaterialSelects() {
