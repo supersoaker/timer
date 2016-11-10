@@ -48,10 +48,11 @@ export default class TimerApp {
 
 
     static setListener() {
-        $('#finished-editing').on('click', TimerApp.updateTimer);
+        $('#update-timer').on('click', TimerApp.updateTimer);
+        $('#delete-timer').on('click', TimerApp.deleteTimer);
         $('#edit-timer').on('click', function() {
             // Get current active timer
-            TimerApp.showPage('edit', $('.navigation .collection a.active').data('id'));
+            TimerApp.showPage('edit', TimerApp.getCurrentTimerId());
         });
     }
 
@@ -64,14 +65,20 @@ export default class TimerApp {
 
     static fillEditPage(id) {
         let timer = TimerApp.defaultTimer;
+        let $deleteBtn = $('#delete-timer');
 
         // If id is set => load content for given timer
         if(id) {
             timer = TimerApp.timerCollection[id];
+            $deleteBtn.show();
+        } else {
+            // If it is create new page
+            $deleteBtn.hide();
         }
         for (let key in timer) {
             $('#edit').find('.' + key).val(timer[key]);
         }
+
     }
 
     static getTimerFromEditPage() {
@@ -80,6 +87,16 @@ export default class TimerApp {
             timer[key] = $('#edit').find('.' + key).val();
         }
         return timer;
+    }
+
+    static getCurrentTimerId() {
+        return $('.navigation .collection a.active').data('id');
+    }
+
+    static deleteTimer() {
+        delete TimerApp.timerCollection[TimerApp.getCurrentTimerId()];
+        TimerApp.updateStorage();
+        TimerApp.showPage('edit');
     }
 
     static updateTimer() {
