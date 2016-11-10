@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <title>Electron Boilerplate</title>
 
-    <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="node_modules/materialize-css/dist/css/materialize.min.css" rel="stylesheet" type="text/css">
     <link href="node_modules/flipclock/compiled/flipclock.css" rel="stylesheet" type="text/css">
+    <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
 
     <script src="helpers/context_menu.js"></script>
     <script src="helpers/external_links.js"></script>
@@ -42,7 +42,7 @@
 
         <div class="content col s9">
             <!-- Edit page content -->
-            <div id="edit" class="card-panel">
+            <div id="edit" class="card-panel page">
                 <div class="row">
                     <input class="id" type="hidden">
 
@@ -76,12 +76,12 @@
             </div>
 
             <!-- Detail page content -->
-            <div id="detail" class="card-panel">
-                <h1 class="title"></h1>
-                <div class="card-panel hoverable">
+            <div id="detail" class="page">
+                <h1 class="title card-panel"></h1>
+                <div class="card-panel hoverable" style="position: relative">
                     <div id="clock-container"></div>
                 </div>
-                <p class="flow-text description">I am Flow Text</p>
+                <p class="flow-text card-panel description">I am Flow Text</p>
                 <a id="edit-timer" class="waves-effect waves-light btn-large">Bearbeiten</a>
             </div>
         </div>

@@ -60,6 +60,10 @@ export default class TimerApp {
         let timer = TimerApp.timerCollection[id];
         for (let key in timer) {
             $('#detail').find('.' + key).html(timer[key]);
+            // If the content is empty => don't show the box
+            timer[key] == '' ?
+                $('#detail').find('.' + key).hide() :
+                $('#detail').find('.' + key).show();
         }
 
         let currentDate = new Date();
@@ -68,19 +72,14 @@ export default class TimerApp {
             diff = 0;
         }
         let clock = $('#clock-container').FlipClock(diff, {
-            //clockFace: 'DailyCounter',
-            countdown: true,
-            callbacks: {
-                stop: function() {
-                    console.log('Countdown stopped');
-                }
-            }
+            countdown: true
         });
     }
 
     static fillEditPage(id) {
         let timer = TimerApp.defaultTimer;
         let $deleteBtn = $('#delete-timer');
+        let $edit = $('#edit');
 
         // If id is set => load content for given timer
         if(id) {
@@ -94,6 +93,10 @@ export default class TimerApp {
             $('#edit').find('.' + key).val(timer[key]);
         }
 
+        // Selectors have to be selected with ids because of materialize css
+        $edit.find('#hour-selector').val(timer['hour-selector']);
+        $edit.find('#minute-selector').val(timer['minute-selector']);
+        $edit.find('#second-selector').val(timer['second-selector']);
     }
 
     static getTimerFromEditPage() {
@@ -209,7 +212,7 @@ export default class TimerApp {
 
     static showPage(name, timerId) {
         // Hide all other pages
-        $('.content > .card-panel').hide();
+        $('.content > .page').hide();
         $('.content').find('#'+ name).show();
 
         // Update active navigation element
