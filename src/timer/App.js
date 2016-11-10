@@ -92,6 +92,7 @@ export default class TimerApp {
             diff = 0;
         }
         let clock = $('#clock-container').FlipClock(diff, {
+            lang:'de',
             countdown: true
         });
     }
