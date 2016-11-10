@@ -56,19 +56,18 @@ export default class TimerApp {
                 if(timer['end-time'] !== 0 && diff < 0) {
                     new Notification(timer.title, {
                         title: timer.title,
-                        body: timer.description,
-                        //icon: path.join(__dirname, 'icon.png')
+                        body: timer.description
                     });
                     timer['end-time'] = 0;
-                    TimerApp.updateTimer(timer);
                     TimerApp.timerCollection[timer.id] = timer;
-                    TimerApp.updateStorage();
+                    TimerApp.updateStorage(() => {}, false);
                 }
             }
         }, 1000);
     }
 
     static setListener() {
+        $('#create-timer').on('click', () => { TimerApp.showPage('edit') });
         $('#update-timer').on('click', TimerApp.updateTimer);
         $('#delete-timer').on('click', TimerApp.deleteTimer);
         $('#edit-timer').on('click', function() {
@@ -109,9 +108,11 @@ export default class TimerApp {
         } else {
             // If it is create new page
             $deleteBtn.hide();
+            let $collection = $('#timer-navigation');
+            $collection.find('a').removeClass('active');
         }
         for (let key in timer) {
-            $('#edit').find('.' + key).val(timer[key]);
+            $edit.find('.' + key).val(timer[key]);
         }
 
         // Selectors have to be selected with ids because of materialize css
@@ -135,7 +136,7 @@ export default class TimerApp {
     }
 
     static getCurrentTimerId() {
-        return $('.navigation .collection a.active').data('id');
+        return $('#timer-navigation a.active').data('id');
     }
 
     static deleteTimer() {
@@ -183,7 +184,7 @@ export default class TimerApp {
         });
     }
 
-    static updateStorage(callback = function() {}) {
+    static updateStorage(callback = function() {}, updateLayout = true) {
         TimerApp.loadDataLayout();
         // Only get the collection when starting the application
         if ($.isEmptyObject(TimerApp.timerCollection)) {
@@ -192,7 +193,9 @@ export default class TimerApp {
 
                 console.log('Got data from storage: ', data);
                 TimerApp.timerCollection = data;
-                TimerApp.updateLayout();
+                if(updateLayout){
+                    TimerApp.updateLayout();
+                }
                 callback();
             });
         } else {
@@ -200,7 +203,9 @@ export default class TimerApp {
             storage.set(collectionStorageName, TimerApp.timerCollection, function(error) {
                 if (error) throw error;
 
-                TimerApp.updateLayout();
+                if(updateLayout){
+                    TimerApp.updateLayout();
+                }
                 callback();
             });
         }
@@ -214,7 +219,7 @@ export default class TimerApp {
 
         // Update timer navigation
         let navigationList = '';
-        let $collection = $('.navigation .collection');
+        let $collection = $('#timer-navigation');
 
         // Clear all elements in navigation
         $collection.empty();
@@ -238,7 +243,7 @@ export default class TimerApp {
 
         // Update active navigation element
         if(name == 'detail'){
-            let $collection = $('.navigation .collection');
+            let $collection = $('#timer-navigation');
             $collection.find('a').removeClass('active');
             $collection.find('a[data-id="'+ timerId +'"]').addClass('active');
         }
