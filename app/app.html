@@ -7,12 +7,14 @@
     <link href="stylesheets/main.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="node_modules/materialize-css/dist/css/materialize.min.css" rel="stylesheet" type="text/css">
+    <link href="node_modules/flipclock/compiled/flipclock.css" rel="stylesheet" type="text/css">
 
     <script src="helpers/context_menu.js"></script>
     <script src="helpers/external_links.js"></script>
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/hammerjs/hammer.min.js"></script>
     <script src="node_modules/materialize-css/dist/js/materialize.min.js"></script>
+    <script src="node_modules/flipclock/compiled/flipclock.min.js"></script>
 
     <script src="app.js"></script>
 </head>
@@ -76,8 +78,8 @@
             <!-- Detail page content -->
             <div id="detail" class="card-panel">
                 <h1 class="title"></h1>
-                <div class="time-wrapper">
-
+                <div class="card-panel hoverable">
+                    <div id="clock-container"></div>
                 </div>
                 <p class="flow-text description">I am Flow Text</p>
                 <a id="edit-timer" class="waves-effect waves-light btn-large">Bearbeiten</a>

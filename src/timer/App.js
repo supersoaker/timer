@@ -61,6 +61,21 @@ export default class TimerApp {
         for (let key in timer) {
             $('#detail').find('.' + key).html(timer[key]);
         }
+
+        let currentDate = new Date();
+        let diff = timer['end-time'] - currentDate.getTime() / 1000;
+        if(diff < 0) {
+            diff = 0;
+        }
+        let clock = $('#clock-container').FlipClock(diff, {
+            //clockFace: 'DailyCounter',
+            countdown: true,
+            callbacks: {
+                stop: function() {
+                    console.log('Countdown stopped');
+                }
+            }
+        });
     }
 
     static fillEditPage(id) {
@@ -111,12 +126,13 @@ export default class TimerApp {
         endTime.setHours( current.getHours() + parseInt(timer['hour-selector']) );
         endTime.setMinutes( current.getMinutes() + parseInt(timer['minute-selector']) );
         endTime.setSeconds( current.getSeconds() + parseInt(timer['second-selector']) );
-        return endTime;
+        return Math.floor(endTime.getTime() / 1000);
     }
 
     static updateTimer() {
         let timer = TimerApp.getTimerFromEditPage();
 
+        // If no title is set exit
         if(!timer.title) {
             TimerApp.showPage('edit');
             return;
@@ -193,7 +209,7 @@ export default class TimerApp {
 
     static showPage(name, timerId) {
         // Hide all other pages
-        $('.content .card-panel').hide();
+        $('.content > .card-panel').hide();
         $('.content').find('#'+ name).show();
 
         // Update active navigation element
