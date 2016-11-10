@@ -94,18 +94,26 @@ export default class TimerApp {
 
     static updateLayout() {
         // here goes the layout.
-        
-        console.log('Updating layout with timers:', TimerApp.timerCollection);
-        // Timer navigation
+        console.log('Updating layout with following timers:', TimerApp.timerCollection);
+
+        // Update timer navigation
         let navigationList = '';
-        $('.collection').empty();
+        let $collection = $('.navigation .collection');
+
+        // Clear all elements in navigation
+        $collection.empty();
         for (var id in TimerApp.timerCollection) {
             let timer = TimerApp.timerCollection[id];
             let $newLink = $('<a href="#!" data-id="'+ timer.id +'" class="collection-item">'+ timer.title +'</a>');
+
+            // Add on click listener on each detail link
             $newLink.on('click', function() {
-                TimerApp.fillDetailPage(this.getAttribute('data-id'));
+                let id = this.getAttribute('data-id');
+                TimerApp.fillDetailPage(id);
+                $collection.find('a').removeClass('active');
+                $collection.find('a[data-id="'+ id +'"]').addClass('active');
             });
-            $('.collection').append($newLink);
+            $collection.append($newLink);
         }
     }
 
