@@ -1,37 +1,82 @@
 let TimerAppInstance = null;
+const storage = require('electron-json-storage');
+const collectionStorageName = 'timer-collection';
+
+
 
 export default class TimerApp {
-
     /**
-     * enable singleton pattern
+     * Get timer object
      */
-    static getInstance() {
-        if(!TimerAppInstance) {
-            TimerAppInstance = new TimerApp();
-        }
-        return TimerAppInstance;
-    }
-
-    get defaultTimer () {
+    static get defaultTimer() {
         return {
+            'id': 0,
             'title': 't',
             'description': 'e',
             'hour-selector': 0,
             'minute-selector': 0,
             'second-selector': 0
         };
-    };
-
-    fillDetailPage() {
-        for (var key in this.defaultTimer) {
-            $('#edit').find('#' + key).val(this.defaultTimer[key]);
-            console.log('#' + key, '=>', this.defaultTimer[key]);
-        }
-
-        this.updateMaterialSelects();
     }
 
-    updateMaterialSelects() {
+    static timerCollection = {};
+
+    /**
+     * initialize the application
+     */
+    static init() {
+        TimerApp.setListener();
+        TimerApp.updateStorage();
+        TimerApp.updateLayout();
+    }
+
+    static setListener() {
+        $('#finished-editing').on('click', TimerApp.updateTimer);
+    }
+
+    static fillDetailPage() {
+        for (let key in TimerApp.defaultTimer) {
+            $('#edit').find('#' + key).val(TimerApp.defaultTimer[key]);
+            console.log('#' + key, '=>', TimerApp.defaultTimer[key]);
+        }
+
+        TimerApp.updateMaterialSelects();
+    }
+
+    static getTimerFromEditPage() {
+        let timer = TimerApp.defaultTimer;
+        for (let key in timer) {
+            timer[key] = $('#edit').find('#' + key).val();
+        }
+        return timer;
+    }
+
+    static updateTimer() {
+        let timer = TimerApp.getTimerFromEditPage();
+        console.log(timer);
+
+        if(timer.id){
+            // update
+        } else {
+            // create
+        }
+    }
+
+    static updateStorage() {
+        storage.get(collectionStorageName, function(error, data) {
+            if (error) throw error;
+
+            console.log('Got data from storage: ', data);
+            TimerApp.timerCollection = data;
+            TimerApp.updateLayout();
+        });
+    }
+
+    static updateLayout() {
+        // here goes the layout.
+    }
+
+    static updateMaterialSelects() {
         // Reinitialize material design selects
         $('select').material_select('destroy');
         $('select').material_select();

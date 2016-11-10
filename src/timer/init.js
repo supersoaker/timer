@@ -3,7 +3,7 @@ import TimerApp from './App.js';
 export default function init() {
     jQuery(document).ready(function($) {
 
-        TimerApp.getInstance().fillDetailPage();
+        TimerApp.init();
 
         (function initializeTimerOptions() {
             var html = '';
@@ -34,7 +34,7 @@ export default function init() {
                     var start = $(this).get(0).selectionStart;
                     var end = $(this).get(0).selectionEnd;
 
-                    // set textarea value to: text before caret + tab + text after caret
+                    // set text are value to: text before caret + tab + text after caret
                     $(this).val($(this).val().substring(0, start)
                         + "\t"
                         + $(this).val().substring(end));
