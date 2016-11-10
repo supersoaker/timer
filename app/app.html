@@ -45,33 +45,37 @@
             <!-- Teal page content  -->
             <div id="edit" class="card-panel">
                 <div class="row">
-                    <input id="id" type="hidden">
+                    <input class="id" type="hidden">
 
                     <div class="input-field col s12">
-                        <input id="title" type="text" class="validate">
+                        <input id="title" class="title" type="text" >
                         <label class="active" for="title">Titel</label>
                     </div>
 
                     <div class="input-field col s4">
-                        <select id="hour-selector"></select>
+                        <select class="hour-selector"></select>
                         <label>Stunden</label>
                     </div>
                     <div class="input-field col s4">
-                        <select id="minute-selector"></select>
+                        <select class="minute-selector"></select>
                         <label>Minuten</label>
                     </div>
                     <div class="input-field col s4">
-                        <select id="second-selector"></select>
+                        <select class="second-selector"></select>
                         <label>Sekunden</label>
                     </div>
 
                     <div class="input-field col s12">
-                        <textarea id="description" class="materialize-textarea" length="500"></textarea>
+                        <textarea id="description" class="description materialize-textarea" length="500"></textarea>
                         <label for="description">Beschreibung</label>
                     </div>
 
                     <a id="finished-editing" class="waves-effect waves-light btn-large">Fertig</a>
                 </div>
+
+            </div>
+
+            <div id="detail" class="card-panel">
 
             </div>
         </div>

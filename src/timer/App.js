@@ -3,7 +3,6 @@ const storage = require('electron-json-storage');
 const collectionStorageName = 'timer-collection';
 
 
-
 export default class TimerApp {
     /**
      * Get timer object
@@ -11,11 +10,12 @@ export default class TimerApp {
     static get defaultTimer() {
         return {
             'id': 0,
-            'title': 't',
-            'description': 'e',
+            'title': '',
+            'description': '',
             'hour-selector': 0,
             'minute-selector': 0,
-            'second-selector': 0
+            'second-selector': 0,
+            'start-date' : 0
         };
     }
 
@@ -34,17 +34,15 @@ export default class TimerApp {
     static fillDetailPage(id) {
         let timer = TimerApp.timerCollection[id];
         for (let key in timer) {
-            $('#edit').find('#' + key).val(timer[key]);
-            console.log('#' + key, '=>', timer[key]);
+            $('#edit').find('.' + key).val(timer[key]);
         }
-
-        TimerApp.updateMaterialSelects();
+        TimerApp.updateMaterialDesign();
     }
 
     static getTimerFromEditPage() {
         let timer = TimerApp.defaultTimer;
         for (let key in timer) {
-            timer[key] = $('#edit').find('#' + key).val();
+            timer[key] = $('#edit').find('.' + key).val();
         }
         return timer;
     }
@@ -117,9 +115,12 @@ export default class TimerApp {
         }
     }
 
-    static updateMaterialSelects() {
+    static updateMaterialDesign() {
         // Reinitialize material design selects
         $('select').material_select('destroy');
         $('select').material_select();
+
+        // Update layouts of text fields
+        Materialize.updateTextFields();
     }
 }
