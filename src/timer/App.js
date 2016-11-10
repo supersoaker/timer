@@ -15,7 +15,7 @@ export default class TimerApp {
             'hour-selector': 0,
             'minute-selector': 0,
             'second-selector': 0,
-            'start-date' : 0
+            'end-date' : 0
         };
     }
 
@@ -27,6 +27,7 @@ export default class TimerApp {
         TimerApp.initializeTimerOptions();
         TimerApp.updateStorage();
         TimerApp.showPage('edit');
+        TimerApp.startNotificationChecker();
     }
 
     static initializeTimerOptions() {
@@ -46,6 +47,26 @@ export default class TimerApp {
         $('#hour-selector').html(html);
     };
 
+    static startNotificationChecker() {
+        setInterval(function() {
+            for (let id in TimerApp.timerCollection) {
+                let timer = TimerApp.timerCollection[id];
+                let currentDate = new Date();
+                let diff = timer['end-time'] - currentDate.getTime() / 1000;
+                if(timer['end-time'] !== 0 && diff < 0) {
+                    new Notification(timer.title, {
+                        title: timer.title,
+                        body: timer.description,
+                        //icon: path.join(__dirname, 'icon.png')
+                    });
+                    timer['end-time'] = 0;
+                    TimerApp.updateTimer(timer);
+                    TimerApp.timerCollection[timer.id] = timer;
+                    TimerApp.updateStorage();
+                }
+            }
+        }, 1000);
+    }
 
     static setListener() {
         $('#update-timer').on('click', TimerApp.updateTimer);
