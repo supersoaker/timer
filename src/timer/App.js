@@ -12,10 +12,11 @@ export default class TimerApp {
             'id': 0,
             'title': '',
             'description': '',
+            'type': 'timer',
             'hour-selector': 0,
             'minute-selector': 0,
             'second-selector': 0,
-            'end-date' : 0
+            'end-time-stamp' : 0
         };
     }
 
@@ -52,13 +53,20 @@ export default class TimerApp {
             for (let id in TimerApp.timerCollection) {
                 let timer = TimerApp.timerCollection[id];
                 let currentDate = new Date();
-                let diff = timer['end-time'] - currentDate.getTime() / 1000;
-                if(timer['end-time'] !== 0 && diff < 0) {
+                let diff = timer['end-time-stamp'] - currentDate.getTime() / 1000;
+                if(timer['end-time-stamp'] !== 0 && diff <= 0) {
+                    if(timer.type == 'interval') {
+                        timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
+                    } else
+                    if(timer.type == 'timer') {
+                        timer['end-time-stamp'] = 0;
+                    } else {
+                        return;
+                    }
                     new Notification(timer.title, {
                         title: timer.title,
                         body: timer.description
                     });
-                    timer['end-time'] = 0;
                     TimerApp.timerCollection[timer.id] = timer;
                     TimerApp.updateStorage(() => {}, false);
                 }
@@ -78,16 +86,17 @@ export default class TimerApp {
 
     static fillDetailPage(id) {
         let timer = TimerApp.timerCollection[id];
+        let $detail = $('#detail');
         for (let key in timer) {
-            $('#detail').find('.' + key).html(timer[key]);
+            $detail.find('.' + key).html(timer[key]);
             // If the content is empty => don't show the box
             timer[key] == '' ?
-                $('#detail').find('.' + key).hide() :
-                $('#detail').find('.' + key).show();
+                $detail.find('.' + key).hide() :
+                $detail.find('.' + key).show();
         }
 
         let currentDate = new Date();
-        let diff = timer['end-time'] - currentDate.getTime() / 1000;
+        let diff = timer['end-time-stamp'] - currentDate.getTime() / 1000;
         if(diff < 0) {
             diff = 0;
         }
@@ -113,13 +122,8 @@ export default class TimerApp {
             $collection.find('a').removeClass('active');
         }
         for (let key in timer) {
-            $edit.find('.' + key).val(timer[key]);
+            $edit.find('#' + key).val(timer[key]);
         }
-
-        // Selectors have to be selected with ids because of materialize css
-        $edit.find('#hour-selector').val(timer['hour-selector']);
-        $edit.find('#minute-selector').val(timer['minute-selector']);
-        $edit.find('#second-selector').val(timer['second-selector']);
     }
 
     static getTimerFromEditPage() {
@@ -127,12 +131,8 @@ export default class TimerApp {
         let $edit = $('#edit');
         // Iterate all elements and get values from classes
         for (let key in timer) {
-            timer[key] = $edit.find('.' + key).val();
+            timer[key] = $edit.find('#' + key).val();
         }
-        // Selectors have to be selected with ids because of materialize css
-        timer['hour-selector'] = $edit.find('#hour-selector').val();
-        timer['minute-selector'] = $edit.find('#minute-selector').val();
-        timer['second-selector'] = $edit.find('#second-selector').val();
         return timer;
     }
 
@@ -165,7 +165,7 @@ export default class TimerApp {
         }
 
         // Recalculate the end time
-        timer['end-time'] = TimerApp.getTimerEnd(timer);
+        timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
 
         if(!timer.id || timer.id == '0'){
             // create
