@@ -37,13 +37,13 @@ export default class TimerApp {
         for(i; i<60; i++)
             html += '<option value="'+i+'">'+i+'</option>';
 
-        $('.minute-selector, .second-selector').html(html);
+        $('#minute-selector, #second-selector').html(html);
 
         // Iterate the options for hours from 0 to 23
         for(i = 0, html = ''; i<25; i++)
             html += '<option value="'+i+'">'+i+'</option>';
 
-        $('.hour-selector').html(html);
+        $('#hour-selector').html(html);
     };
 
 
@@ -83,9 +83,15 @@ export default class TimerApp {
 
     static getTimerFromEditPage() {
         let timer = TimerApp.defaultTimer;
+        let $edit = $('#edit');
+        // Iterate all elements and get values from classes
         for (let key in timer) {
-            timer[key] = $('#edit').find('.' + key).val();
+            timer[key] = $edit.find('.' + key).val();
         }
+        // Selectors have to be selected with ids because of materialize css
+        timer['hour-selector'] = $edit.find('#hour-selector').val();
+        timer['minute-selector'] = $edit.find('#minute-selector').val();
+        timer['second-selector'] = $edit.find('#second-selector').val();
         return timer;
     }
 
@@ -102,11 +108,9 @@ export default class TimerApp {
     static getTimerEnd(timer) {
         var current = new Date ();
         var endTime = new Date ( current );
-        console.log(current);
-        endTime.setHours( current.getHours() + timer['hour-selector'] );
-        endTime.setMinutes( current.getMinutes() + timer['minute-selector'] );
-        endTime.setSeconds( current.getSeconds() + timer['second-selector'] );
-        console.log(endTime);
+        endTime.setHours( current.getHours() + parseInt(timer['hour-selector']) );
+        endTime.setMinutes( current.getMinutes() + parseInt(timer['minute-selector']) );
+        endTime.setSeconds( current.getSeconds() + parseInt(timer['second-selector']) );
         return endTime;
     }
 
@@ -197,7 +201,6 @@ export default class TimerApp {
             let $collection = $('.navigation .collection');
             $collection.find('a').removeClass('active');
             $collection.find('a[data-id="'+ timerId +'"]').addClass('active');
-            console.log($collection.find('a[data-id="'+ timerId +'"]'));
         }
 
         // Capitalize and execute fill page method
