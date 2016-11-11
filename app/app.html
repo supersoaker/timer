@@ -49,48 +49,46 @@
         <div class="content col s9">
             <!-- Edit page content -->
             <div id="edit" class=" page">
-                <!--<div class="row">-->
-                    <input class="id" type="hidden">
+                <input id="id" type="hidden">
 
-                    <div class="card-panel row">
-                        <div class="input-field col s12">
-                            <input id="title" class="title" type="text" >
-                            <label class="active" for="title">Titel</label>
-                        </div>
+                <div class="card-panel row">
+                    <div class="input-field col s12">
+                        <input id="title" class="title" type="text" >
+                        <label class="active" for="title">Titel</label>
                     </div>
+                </div>
 
-                    <div class="card-panel row">
-                        <div class="input-field col s3">
-                            <select id="hour-selector"></select>
-                            <label>Stunden</label>
-                        </div>
-                        <div class="input-field col s3">
-                            <select id="minute-selector"></select>
-                            <label>Minuten</label>
-                        </div>
-                        <div class="input-field col s3">
-                            <select id="second-selector"></select>
-                            <label>Sekunden</label>
-                        </div>
-                        <div class="input-field col s3">
-                            <select id="type">
-                                <option value="timer" selected>Timer</option>
-                                <option value="interval">Interval</option>
-                            </select>
-                            <label>Typ</label>
-                        </div>
+                <div class="card-panel row">
+                    <div class="input-field col s3">
+                        <select id="hour-selector"></select>
+                        <label>Stunden</label>
                     </div>
-
-                    <div class="card-panel row">
-                        <div class="input-field col s12">
-                            <textarea id="description" class="description materialize-textarea" length="500"></textarea>
-                            <label for="description">Beschreibung</label>
-                        </div>
+                    <div class="input-field col s3">
+                        <select id="minute-selector"></select>
+                        <label>Minuten</label>
                     </div>
+                    <div class="input-field col s3">
+                        <select id="second-selector"></select>
+                        <label>Sekunden</label>
+                    </div>
+                    <div class="input-field col s3">
+                        <select id="type">
+                            <option value="timer" selected>Timer</option>
+                            <option value="interval">Interval</option>
+                        </select>
+                        <label>Typ</label>
+                    </div>
+                </div>
 
-                    <a id="update-timer" class="waves-effect waves-light btn-large">Fertig</a>
-                    <a id="delete-timer" class="waves-effect waves-light btn-large red">Löschen</a>
-                <!--</div>-->
+                <div class="card-panel row">
+                    <div class="input-field col s12">
+                        <textarea id="description" class="description materialize-textarea" length="500"></textarea>
+                        <label for="description">Beschreibung</label>
+                    </div>
+                </div>
+
+                <a id="update-timer" class="waves-effect waves-light btn-large">Fertig</a>
+                <a id="delete-timer" class="waves-effect waves-light btn-large red">Löschen</a>
 
             </div>
 
