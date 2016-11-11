@@ -31,6 +31,15 @@ It will also download Electron runtime and install dependencies for the second `
 npm start
 ```
 
+
+# ToDo's
+
+- implement active and inactive buttons
+
+- implement multiple languages (currently only german)
+
+- implement search
+
 # License
 
 Released under GNU AGPLv3.
