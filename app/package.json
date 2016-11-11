@@ -1,8 +1,8 @@
 {
   "name": "desktop-timer",
   "productName": "Desktop Timer",
-  "description": "Starter for your Electron application",
-  "version": "0.0.1",
+  "description": "Just another desktop timer app in material design.",
+  "version": "1.0",
   "author": "Marlon Rüscher <dev.supersoaker@gmail.com>",
   "copyright": "© 2016, Supermarlon.",
   "homepage": "http://supermarlon.de",
