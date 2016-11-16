@@ -102,14 +102,19 @@ export default class TimerApp {
         let currentDate = new Date();
         let diff = endTimeStamp - currentDate.getTime() / 1000;
         if(diff <= 0) {
-            diff = 0;
+            // If the timer is not running, freeze the FlipClock to the start time
+            let newDiff = TimerApp.getTimerEnd(timer) - currentDate.getTime() / 1000;
+            let clock = $('#clock-container').FlipClock(newDiff, {
+                autoStart: false,
+                countdown: true
+            });
             $('#activate').prop('checked', false);
         } else {
             $('#activate').prop('checked', true);
+            let clock = $('#clock-container').FlipClock(diff, {
+                countdown: true
+            });
         }
-        let clock = $('#clock-container').FlipClock(diff, {
-            countdown: true
-        });
     }
 
     static fillEditPage(id) {
@@ -167,12 +172,12 @@ export default class TimerApp {
     }
 
     static getTimerEnd(timer) {
-        var current = new Date ();
-        var endTime = new Date ( current );
+        let current = new Date();
+        let endTime = new Date ( current );
         endTime.setHours( current.getHours() + parseInt(timer['hour-selector']) );
         endTime.setMinutes( current.getMinutes() + parseInt(timer['minute-selector']) );
         endTime.setSeconds( current.getSeconds() + parseInt(timer['second-selector']) );
-        return Math.floor(endTime.getTime() / 1000);
+        return endTime.getTime() / 1000;
     }
 
     static updateTimer() {
