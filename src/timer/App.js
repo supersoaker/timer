@@ -16,7 +16,8 @@ export default class TimerApp {
             'hour-selector': 0,
             'minute-selector': 0,
             'second-selector': 0,
-            'end-time-stamp' : 0
+            'end-time-stamp' : 0,
+            'is-active': 0
         };
     }
 
@@ -55,12 +56,11 @@ export default class TimerApp {
                 let currentDate = new Date();
                 let diff = timer['end-time-stamp'] - currentDate.getTime() / 1000;
                 if(timer['end-time-stamp'] !== 0 && diff <= 0) {
-                    if(timer.type == 'interval') {
-                        timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
-                        // Update view of current detail timer, if it is an interval
-                        TimerApp.fillDetailPage();
-                    } else
                     if(timer.type == 'timer') {
+                        if(timer.type == 'interval') {
+                            timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
+                        } else
+                        // Update view of current detail timer, if it is an interval
                         timer['end-time-stamp'] = 0;
                     } else {
                         return;
@@ -70,6 +70,7 @@ export default class TimerApp {
                         body: timer.description
                     });
                     TimerApp.timerCollection[timer.id] = timer;
+                    TimerApp.fillDetailPage();
                     TimerApp.updateStorage(() => {}, false);
                 }
             }
@@ -80,13 +81,14 @@ export default class TimerApp {
         $('#create-timer').on('click', () => { TimerApp.showPage('edit') });
         $('#update-timer').on('click', TimerApp.updateTimer);
         $('#delete-timer').on('click', TimerApp.deleteTimer);
+        $('#activate').on('click', TimerApp.activateTimer);
         $('#edit-timer').on('click', function() {
             // Get current active timer
             TimerApp.showPage('edit', TimerApp.getCurrentTimerId());
         });
     }
 
-    static fillDetailPage(id = TimerApp.getCurrentTimerId()) {
+    static fillDetailPage(id = TimerApp.getCurrentTimerId(), newEndTime = false) {
         let timer = TimerApp.timerCollection[id];
         let $detail = $('#detail');
         for (let key in timer) {
@@ -96,11 +98,14 @@ export default class TimerApp {
                 $detail.find('.' + key).hide() :
                 $detail.find('.' + key).show();
         }
-
+        let endTimeStamp = newEndTime ? newEndTime : timer['end-time-stamp'];
         let currentDate = new Date();
-        let diff = timer['end-time-stamp'] - currentDate.getTime() / 1000;
-        if(diff < 0) {
+        let diff = endTimeStamp - currentDate.getTime() / 1000;
+        if(diff <= 0) {
             diff = 0;
+            $('#activate').prop('checked', false);
+        } else {
+            $('#activate').prop('checked', true);
         }
         let clock = $('#clock-container').FlipClock(diff, {
             countdown: true
@@ -125,6 +130,18 @@ export default class TimerApp {
         for (let key in timer) {
             $edit.find('#' + key).val(timer[key]);
         }
+    }
+
+    static activateTimer() {
+        let timer = TimerApp.timerCollection[ TimerApp.getCurrentTimerId() ];
+        let timerEnd = 0;
+        if($('#activate').is(':checked')) {
+            // activate the timer
+            timerEnd = TimerApp.getTimerEnd(timer);
+        }
+        timer['end-time-stamp'] = timerEnd;
+        TimerApp.fillDetailPage(TimerApp.getCurrentTimerId(), timerEnd);
+        TimerApp.timerCollection[ TimerApp.getCurrentTimerId() ] = timer;
     }
 
     static getTimerFromEditPage() {
