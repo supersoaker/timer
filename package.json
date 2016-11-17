@@ -1,7 +1,6 @@
 {
   "build": {
-    "appId": "de.supermarlon.desktop-timer",
-    "app-category-type": "your.app.category.type",
+    "appId": "de.supermarlon.easy-timer",
     "win": {
       "target": [
         "nsis"
