@@ -269,8 +269,9 @@ export default class TimerApp {
 
     static showPage(name, timerId) {
         // Hide all other pages
-        $('.content > .page').hide();
+        $('.content .app-page').hide();
         $('.content').find('#'+ name).show();
+        console.log($('.content').find('#'+ name));
 
         // Update active navigation element
         if(name == 'detail'){
