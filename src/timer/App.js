@@ -16,8 +16,7 @@ export default class TimerApp {
             'hour-selector': 0,
             'minute-selector': 0,
             'second-selector': 0,
-            'end-time-stamp' : 0,
-            'is-active': 0
+            'end-time-stamp' : 0
         };
     }
 
@@ -56,10 +55,10 @@ export default class TimerApp {
                 let currentDate = new Date();
                 let diff = timer['end-time-stamp'] - currentDate.getTime() / 1000;
                 if(timer['end-time-stamp'] !== 0 && diff <= 0) {
+                    if(timer.type == 'interval') {
+                        timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
+                    } else
                     if(timer.type == 'timer') {
-                        if(timer.type == 'interval') {
-                            timer['end-time-stamp'] = TimerApp.getTimerEnd(timer);
-                        } else
                         // Update view of current detail timer, if it is an interval
                         timer['end-time-stamp'] = 0;
                     } else {
@@ -89,6 +88,10 @@ export default class TimerApp {
     }
 
     static fillDetailPage(id = TimerApp.getCurrentTimerId(), newEndTime = false) {
+        if(typeof id == 'undefined') {
+            // To ensure that this function is not called when the document is not ready
+            return false;
+        }
         let timer = TimerApp.timerCollection[id];
         let $detail = $('#detail');
         for (let key in timer) {
