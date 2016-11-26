@@ -12,5 +12,10 @@ Thumbs.db
 /app/**/*.map
 
 /dist
+# adding distribtion packages
+!/dist/mac/*.dmg
+!/dist/mac/*.zip
+
+
 
 /coverage
