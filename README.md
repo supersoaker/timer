@@ -5,6 +5,8 @@ A minimalistic desktop timer for Mac, Windows and Linux. You can easily set inte
 
 This project is build up on the [Electron Boilerplate](https://github.com/szwacz/electron-boilerplate), uses [FlipClock](https://github.com/objectivehtml/FlipClock) and [Materialize](https://github.com/Dogfalo/materialize). 
 
+![Desktop example image](/resources/osx/desktop-example.png)
+
 # Quick start
 The only development dependency of this project is [Node.js](https://nodejs.org). So just make sure you have it installed.
 Then type few commands known to every Node developer...
